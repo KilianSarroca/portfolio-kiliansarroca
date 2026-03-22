@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Projets de Kilian Sarroca Bonnafé — Réalisations en systèmes, réseaux et développement.">
+    <meta name="theme-color" content="#0f1117">
+    <!-- Favicon SVG -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230f1117'/><text y='.9em' font-size='68' x='50%' text-anchor='middle' font-family='Georgia,serif' fill='%23c8a86b'>K</text></svg>">
+
+    <!-- Open Graph -->
+    <meta property="og:title"       content="Projets — Kilian Sarroca Bonnafé">
+    <meta property="og:description" content="Projets en administration systèmes, réseaux et développement web.">
+    <meta property="og:type"        content="website">
+    <meta property="og:locale"      content="fr_FR">
+
+    <title>Projets — Kilian Sarroca Bonnafé</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Overlay transition -->
+    <div id="page-overlay"></div>
+    <!-- Barre de progression -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+
+
+    <nav class="navbar scrolled" role="navigation">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Kilian<span class="dot">.</span></a>
+                                                <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="competences.html">Compétences</a></li>
+                <li><a href="certifications.html">Certifications</a></li>
+                <li><a href="projets.html">Projets</a></li>
+                <li><a href="experiences.html">Expériences</a></li>
+                <li><a href="veille.html">Veille</a></li>
+                <li><a href="contact.html" class="nav-cta">Me contacter</a></li>
+            </ul>
+            <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <span class="section-label" data-reveal>Réalisations</span>
+            <h1 class="section-heading" data-reveal data-delay="1">
+                Mes <em>Projets</em>
+            </h1>
+            <p class="body-text" style="margin-top:1.2rem; max-width:480px;" data-reveal data-delay="2">
+                Projets réalisés dans le cadre de ma formation BTS SIO SISR et en autonomie.
+            </p>
+        </div>
+    </header>
+
+    <main class="projects-body">
+        <div class="container">
+
+            <div class="project-list" data-reveal>
+
+                <!-- Projet 1 -->
+                <article class="project-item">
+                    <span class="project-num">01</span>
+                    <div class="project-info">
+                        <h3>Portfolio Personnel</h3>
+                        <p>
+                            Conception et développement d'un portfolio professionnel responsive en HTML, CSS et JavaScript vanilla. Mise en œuvre de bonnes pratiques d'accessibilité (ARIA), optimisation des performances et design adaptatif multi-appareils.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">HTML5</span>
+                            <span class="project-tag">CSS3</span>
+                            <span class="project-tag">JavaScript</span>
+                            <span class="project-tag">Responsive</span>
+                            <span class="project-tag">Accessibilité</span>
+                        </div>
+                    </div>
+                    <a href="https://github.com/KilianSarroca" target="_blank" rel="noopener noreferrer" class="project-arrow" aria-label="Voir sur GitHub">
+                        <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                    </a>
+                </article>
+
+                <!-- Projet 2 -->
+                <article class="project-item">
+                    <span class="project-num">02</span>
+                    <div class="project-info">
+                        <h3>Infrastructure Réseau — TP SISR</h3>
+                        <p>
+                            Mise en place d'une infrastructure réseau complète en environnement virtualisé. Configuration de VLAN, routage inter-VLAN, services DHCP/DNS, déploiement d'un Active Directory et définition des GPO de sécurité.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Windows Server 2019</span>
+                            <span class="project-tag">Active Directory</span>
+                            <span class="project-tag">VLAN</span>
+                            <span class="project-tag">DHCP / DNS</span>
+                            <span class="project-tag">VirtualBox</span>
+                        </div>
+                    </div>
+                    <span class="project-arrow" aria-hidden="true">
+                        <i class="fas fa-lock" aria-hidden="true"></i>
+                    </span>
+                </article>
+
+                <!-- Projet 3 -->
+                <article class="project-item">
+                    <span class="project-num">03</span>
+                    <div class="project-info">
+                        <h3>Administration Serveur Linux</h3>
+                        <p>
+                            Déploiement et sécurisation d'un serveur web Apache sous Debian. Configuration du pare-feu iptables, mise en place de certificats SSL/TLS, accès SSH sécurisé par clé, et automatisation de sauvegardes via crontab.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Debian</span>
+                            <span class="project-tag">Apache2</span>
+                            <span class="project-tag">SSL / TLS</span>
+                            <span class="project-tag">iptables</span>
+                            <span class="project-tag">SSH</span>
+                            <span class="project-tag">Bash</span>
+                        </div>
+                    </div>
+                    <span class="project-arrow" aria-hidden="true">
+                        <i class="fas fa-lock" aria-hidden="true"></i>
+                    </span>
+                </article>
+
+                <!-- Projet 4 -->
+                <article class="project-item">
+                    <span class="project-num">04</span>
+                    <div class="project-info">
+                        <h3>Audit de Sécurité — Projet BTS</h3>
+                        <p>
+                            Réalisation d'un audit de sécurité d'une infrastructure réseau fictive. Identification des vulnérabilités, rédaction d'un rapport d'analyse et proposition de mesures correctives conformes aux recommandations ANSSI.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Audit</span>
+                            <span class="project-tag">ANSSI</span>
+                            <span class="project-tag">Nmap</span>
+                            <span class="project-tag">Rapport technique</span>
+                        </div>
+                    </div>
+                    <span class="project-arrow" aria-hidden="true">
+                        <i class="fas fa-lock" aria-hidden="true"></i>
+                    </span>
+                </article>
+
+            </div>
+
+            <p style="margin-top:2rem; font-size:0.8rem; color: var(--muted);" data-reveal>
+                <i class="fas fa-lock" style="color:var(--gold); margin-right:0.4rem;" aria-hidden="true"></i>
+                Les projets sans lien sont des travaux scolaires non publiés publiquement.
+            </p>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <p class="footer-copy">&copy; 2025 Kilian Sarroca Bonnafé</p>
+                <div class="footer-links">
+                    <a href="competences.html">Compétences</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-top" aria-label="Retour en haut">
+        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    </a>
+
+    <script src="js/content-loader.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

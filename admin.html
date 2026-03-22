@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — KSB Portfolio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23111'/><text y='.85em' font-size='60' x='50%' text-anchor='middle' fill='%23c8a86b'>⚙</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0b0d12;--surface:#131620;--surface2:#1a1f2e;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);--gold:#c8a86b;--gold-lt:rgba(200,168,107,.12);--gold-dk:rgba(200,168,107,.06);--text:#e8e8f0;--muted:#6b7080;--muted-lt:#9a9fb0;--green:#4ade80;--red:#f87171;--blue:#60a5fa;--r:8px;--r-sm:4px;--font:'DM Sans',system-ui,sans-serif}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+a{color:var(--gold);text-decoration:none}a:hover{opacity:.8}
+button{cursor:pointer;font-family:var(--font)}
+input,textarea,select{font-family:var(--font);background:var(--bg);border:1px solid var(--border);border-radius:var(--r);color:var(--text);padding:.6rem .9rem;font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;width:100%}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,107,.1)}
+textarea{resize:vertical;min-height:80px}
+#login-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:9999}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:3rem 2.5rem;width:380px;text-align:center}
+.login-logo{font-size:2.8rem;font-weight:700;color:var(--text);letter-spacing:.05em;margin-bottom:.3rem}.login-logo span{color:var(--gold)}
+.login-sub{color:var(--muted);font-size:.82rem;margin-bottom:2rem}
+.login-input{width:100%;padding:.85rem 1rem;margin-bottom:1rem;font-size:.95rem}
+.login-btn{width:100%;padding:.9rem;background:var(--gold);color:#0b0d12;border:none;border-radius:var(--r);font-size:.9rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:opacity .2s}.login-btn:hover{opacity:.88}
+.login-err{color:var(--red);font-size:.8rem;margin-top:.6rem;display:none}
+#dashboard{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+.sidebar-logo{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);font-size:1.05rem;font-weight:700;letter-spacing:.05em;display:flex;align-items:center;gap:.5rem}.sidebar-logo span{color:var(--gold)}.sidebar-logo small{color:var(--muted);font-size:.62rem;font-weight:400;margin-left:auto}
+.sidebar-section{padding:.5rem 0}
+.sidebar-label{padding:.4rem 1.4rem;font-size:.64rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.nav-item{display:flex;align-items:center;gap:.7rem;padding:.6rem 1.4rem;color:var(--muted);font-size:.83rem;font-weight:500;border:none;background:none;width:100%;text-align:left;cursor:pointer;border-left:2px solid transparent;transition:all .18s}.nav-item i{width:1rem;text-align:center;font-size:.83rem}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03)}.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-lt)}
+.sidebar-footer{padding:1rem 1.4rem;border-top:1px solid var(--border);margin-top:auto}.sidebar-footer a{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:.5rem}.sidebar-footer a:hover{color:var(--text)}
+.main{margin-left:230px;padding:2rem 2.5rem;min-height:100vh}
+.page-section{display:none}.page-section.active{display:block}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
+.page-title{font-size:1.35rem;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:.8rem}
+.active-badge{display:flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:.3rem .9rem;font-size:.76rem;color:var(--muted)}
+.active-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pdot 2s infinite}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:.35}}
+.ip-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--gold);display:flex;align-items:center;gap:.7rem;margin-bottom:1.5rem}
+.ip-bar i{color:var(--muted);font-size:.75rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem}
+.card-header{padding:.9rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+.card-title{font-size:.88rem;font-weight:600}
+.card-body{padding:1.4rem}
+.form-grid{display:grid;gap:1rem}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.form-field{display:flex;flex-direction:column;gap:.35rem}
+.form-label{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.form-hint{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+.btn{display:inline-flex;align-items:center;gap:.45rem;border:none;border-radius:var(--r);padding:.55rem 1.1rem;font-family:var(--font);font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .18s;white-space:nowrap}
+.bg{background:var(--gold);color:#0b0d12}.bg:hover{opacity:.88;transform:translateY(-1px)}
+.bo{background:none;color:var(--muted);border:1px solid var(--border)}.bo:hover{color:var(--text);border-color:var(--border2)}
+.br{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}.br:hover{background:rgba(248,113,113,.18)}
+.bsm{padding:.3rem .65rem;font-size:.7rem;background:none;border:1px solid var(--border);color:var(--muted);border-radius:var(--r-sm)}.bsm:hover{border-color:var(--gold);color:var(--gold)}
+.bi{width:28px;height:28px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-sm);background:none;border:1px solid var(--border);color:var(--muted);font-size:.75rem;cursor:pointer;transition:all .18s}.bi:hover{border-color:var(--gold);color:var(--gold)}.bi.del:hover{border-color:var(--red);color:var(--red)}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem}
+.stat-label{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.stat-value{font-size:1.9rem;font-weight:600;color:var(--text);font-family:'JetBrains Mono',monospace;line-height:1}
+.stat-value.go{color:var(--gold)}.stat-value.gr{color:var(--green)}
+.stat-meta{font-size:.7rem;color:var(--muted);margin-top:.35rem}
+table{width:100%;border-collapse:collapse}
+thead tr{background:rgba(255,255,255,.02)}
+th{font-size:.67rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.7rem 1rem;text-align:left;border-bottom:1px solid var(--border)}
+td{font-size:.8rem;color:var(--text);padding:.65rem 1rem;border-bottom:1px solid var(--border)}
+tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:rgba(255,255,255,.02)}
+td.mo{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold)}
+td.di{color:var(--muted)}
+.bdg{background:rgba(200,168,107,.1);color:var(--gold);border:1px solid rgba(200,168,107,.2);padding:.15rem .5rem;border-radius:3px;font-size:.7rem;font-weight:500}
+.filter-row{display:flex;gap:.5rem;padding:.9rem 1.4rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.chip{background:none;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:.28rem .75rem;font-size:.73rem;cursor:pointer;transition:all .18s;font-family:var(--font)}.chip:hover,.chip.active{background:var(--gold-lt);border-color:var(--gold);color:var(--gold)}
+.bar-chart{padding:1rem 1.4rem}
+.bar-row{display:flex;align-items:center;gap:1rem;margin-bottom:.5rem}
+.bar-name{font-size:.78rem;color:var(--muted);min-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .5s ease}
+.bar-count{font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace;min-width:2rem;text-align:right}
+.items-list{display:flex;flex-direction:column;gap:.4rem;padding:.4rem;max-height:280px;overflow-y:auto}
+.item-row{display:flex;align-items:center;gap:.6rem;padding:.55rem .8rem;background:var(--bg);border-radius:var(--r-sm);border:1px solid transparent;transition:border .18s}.item-row:hover{border-color:var(--border2)}
+.item-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.item-dot.obtained,.item-dot.stage{background:var(--gold)}.item-dot.in-progress{background:var(--blue)}.item-dot.planned,.item-dot.job{background:var(--muted)}.item-dot.formation{background:var(--green)}
+.item-label{flex:1;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-sub{font-size:.72rem;color:var(--muted)}
+.item-actions{display:flex;gap:.3rem;flex-shrink:0}
+.sk-cat{font-size:.66rem;background:var(--gold-dk);border:1px solid rgba(200,168,107,.15);color:var(--gold);padding:.1rem .45rem;border-radius:3px;flex-shrink:0}
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:var(--r);padding:.8rem 1.3rem;font-size:.82rem;color:var(--text);opacity:0;transform:translateY(8px);pointer-events:none;transition:all .22s;z-index:9999;max-width:320px}
+#toast.show{opacity:1;transform:none}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(200,168,107,.25);border-radius:3px}
+@media(max-width:700px){.sidebar{width:100%;position:relative}.main{margin-left:0;padding:1rem}.fg2,.fg3{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">KSB<span>.</span></div>
+    <p class="login-sub">Panneau d'administration — Portfolio</p>
+    <input type="password" id="pwd-input" class="login-input" placeholder="Mot de passe" autocomplete="current-password">
+    <button class="login-btn" id="login-btn">Connexion</button>
+    <p class="login-err" id="login-err">Mot de passe incorrect.</p>
+  </div>
+</div>
+
+<div id="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span>KSB</span>. Admin <small>v2</small></div>
+    <nav>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Analytics</div>
+        <button class="nav-item active" data-tab="overview"><i class="fas fa-chart-line"></i>Vue d'ensemble</button>
+        <button class="nav-item" data-tab="visitors"><i class="fas fa-users"></i>Visiteurs</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Contenu</div>
+        <button class="nav-item" data-tab="profil"><i class="fas fa-user"></i>Profil &amp; Accueil</button>
+        <button class="nav-item" data-tab="about"><i class="fas fa-id-card"></i>À propos</button>
+        <button class="nav-item" data-tab="skills"><i class="fas fa-tools"></i>Compétences</button>
+        <button class="nav-item" data-tab="projets"><i class="fas fa-code"></i>Projets</button>
+        <button class="nav-item" data-tab="xp"><i class="fas fa-briefcase"></i>Expériences</button>
+        <button class="nav-item" data-tab="certs"><i class="fas fa-certificate"></i>Certifications</button>
+        <button class="nav-item" data-tab="veille"><i class="fas fa-newspaper"></i>Veille</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Système</div>
+        <button class="nav-item" data-tab="settings"><i class="fas fa-cog"></i>Paramètres</button>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><a href="index.html"><i class="fas fa-arrow-left"></i>Retour au portfolio</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="page-title" id="tab-title">Vue d'ensemble</div>
+      <div class="topbar-right">
+        <div class="active-badge"><div class="active-dot"></div><span id="active-count">1</span>&nbsp;actif(s)</div>
+        <button class="btn br" id="logout-btn"><i class="fas fa-sign-out-alt"></i>Déco.</button>
+      </div>
+    </div>
+    <div class="ip-bar" id="ip-bar"><i class="fas fa-globe"></i><span>Détection IP…</span></div>
+
+    <!-- OVERVIEW -->
+    <div class="page-section active" id="tab-overview">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Visites totales</div><div class="stat-value go" id="s-total">—</div><div class="stat-meta">Toutes pages</div></div>
+        <div class="stat-card"><div class="stat-label">IPs uniques</div><div class="stat-value" id="s-unique">—</div><div class="stat-meta">Visiteurs distincts</div></div>
+        <div class="stat-card"><div class="stat-label">Onglets actifs</div><div class="stat-value gr" id="s-active">1</div><div class="stat-meta">Ce navigateur</div></div>
+        <div class="stat-card"><div class="stat-label">Durée moyenne</div><div class="stat-value" id="s-dur">—</div><div class="stat-meta">Secondes/visite</div></div>
+      </div>
+      <div class="card"><div class="card-header"><span class="card-title">Pages les plus visitées</span></div><div class="bar-chart" id="chart-ov"></div></div>
+      <div class="card"><div class="card-header"><span class="card-title">5 dernières visites</span></div><div style="padding:0"><table><thead><tr><th>IP</th><th>Localisation</th><th>Page</th><th>Date</th><th>Durée</th></tr></thead><tbody id="tb-recent"></tbody></table></div></div>
+    </div>
+
+    <!-- VISITEURS -->
+    <div class="page-section" id="tab-visitors">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Journal des visites</span><button class="btn br" id="clear-v-btn"><i class="fas fa-trash"></i>Effacer</button></div>
+        <div class="filter-row">
+          <button class="chip active" data-vf="all">Tout</button>
+          <button class="chip" data-vf="index.html">Accueil</button>
+          <button class="chip" data-vf="competences.html">Compétences</button>
+          <button class="chip" data-vf="certifications.html">Certifications</button>
+          <button class="chip" data-vf="projets.html">Projets</button>
+          <button class="chip" data-vf="experiences.html">Expériences</button>
+          <button class="chip" data-vf="veille.html">Veille</button>
+          <button class="chip" data-vf="contact.html">Contact</button>
+        </div>
+        <div style="padding:0"><table><thead><tr><th>#</th><th>IP</th><th>Ville/Pays</th><th>Page</th><th>Navigateur</th><th>Date</th><th>Durée</th></tr></thead><tbody id="tb-all"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- PROFIL -->
+    <div class="page-section" id="tab-profil">
+      <div class="card"><div class="card-header"><span class="card-title">Identité &amp; Hero</span><button class="btn bg" id="save-profil"><i class="fas fa-save"></i>Sauvegarder</button></div>
+        <div class="card-body"><div class="form-grid">
+          <div class="fg2"><div class="form-field"><label class="form-label">Prénom</label><input id="p-firstname"></div><div class="form-field"><label class="form-label">Nom</label><input id="p-lastname"></div></div>
+          <div class="form-field"><label class="form-label">Tagline héro (sous le nom)</label><input id="p-tagline"></div>
+          <div class="form-field"><label class="form-label">Description courte</label><textarea id="p-desc"></textarea></div>
+          <div class="fg3">
+            <div class="form-field"><label class="form-label">Stat 1 — Valeur</label><input id="p-s1n"></div>
+            <div class="form-field"><label class="form-label">Stat 1 — Label</label><input id="p-s1l"></div>
+            <div></div>
+            <div class="form-field"><label class="form-label">Stat 2 — Valeur</label><input id="p-s2n"></div>
+            <div class="form-field"><label class="form-label">Stat 2 — Label</label><input id="p-s2l"></div>
+            <div></div>
+            <div class="form-field"><label class="form-label">Stat 3 — Valeur</label><input id="p-s3n"></div>
+            <div class="form-field"><label class="form-label">Stat 3 — Label</label><input id="p-s3l"></div>
+            <div></div>
+          </div>
+          <div class="fg2">
+            <div class="form-field"><label class="form-label">LinkedIn (URL)</label><input id="p-li"></div>
+            <div class="form-field"><label class="form-label">GitHub (URL)</label><input id="p-gh"></div>
+          </div>
+          <div class="form-field"><label class="form-label">Email</label><input id="p-email"></div>
+          <p class="form-hint"><i class="fas fa-info-circle" style="color:var(--gold)"></i> Données stockées localement. Les pages portfolio les chargent automatiquement via localStorage.</p>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- À PROPOS -->
+    <div class="page-section" id="tab-about">
+      <div class="card"><div class="card-header"><span class="card-title">Section À propos</span><button class="btn bg" id="save-about"><i class="fas fa-save"></i>Sauvegarder</button></div>
+        <div class="card-body"><div class="form-grid">
+          <div class="form-field"><label class="form-label">Paragraphe 1</label><textarea id="ab-p1" style="min-height:90px"></textarea></div>
+          <div class="form-field"><label class="form-label">Paragraphe 2</label><textarea id="ab-p2" style="min-height:90px"></textarea></div>
+          <div class="fg2">
+            <div class="form-field"><label class="form-label">Formation</label><input id="ab-form"></div>
+            <div class="form-field"><label class="form-label">Spécialisation</label><input id="ab-spec"></div>
+            <div class="form-field"><label class="form-label">Localisation</label><input id="ab-loc"></div>
+            <div class="form-field"><label class="form-label">Année / Disponibilité</label><input id="ab-dispo"></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- COMPÉTENCES -->
+    <div class="page-section" id="tab-skills">
+      <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:1.5rem">
+        <div class="card"><div class="card-header"><span class="card-title">Compétences</span><button class="btn bsm" id="new-sk-btn"><i class="fas fa-plus"></i>Ajouter</button></div><div class="items-list" id="sk-list"></div></div>
+        <div class="card"><div class="card-header"><span class="card-title" id="sk-form-t">Nouvelle compétence</span></div><div class="card-body"><div class="form-grid">
+          <div class="form-field"><label class="form-label">Nom *</label><input id="sk-name" placeholder="ex: Active Directory"></div>
+          <div class="form-field"><label class="form-label">Catégorie</label><select id="sk-cat"><option value="systeme">Systèmes &amp; Infrastructure</option><option value="cyber">Cybersécurité</option><option value="reseau">Réseaux &amp; Protocoles</option><option value="dev">Développement Web</option></select></div>
+          <div class="form-field"><label class="form-label">Icône FontAwesome</label><input id="sk-icon" placeholder="fas fa-server"><div class="form-hint">Ex : fas fa-server · fab fa-linux · fas fa-shield-alt</div></div>
+          <div style="display:flex;gap:.6rem"><button class="btn bg" id="sk-save"><i class="fas fa-save"></i>Sauvegarder</button><button class="btn br" id="sk-del" style="display:none"><i class="fas fa-trash"></i>Supprimer</button></div>
+        </div></div></div>
+      </div>
+    </div>
+
+    <!-- PROJETS -->
+    <div class="page-section" id="tab-projets">
+      <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:1.5rem">
+        <div class="card"><div class="card-header"><span class="card-title">Projets</span><button class="btn bsm" id="new-pj-btn"><i class="fas fa-plus"></i>Ajouter</button></div><div class="items-list" id="pj-list"></div></div>
+        <div class="card"><div class="card-header"><span class="card-title" id="pj-form-t">Nouveau projet</span></div><div class="card-body"><div class="form-grid">
+          <div class="form-field"><label class="form-label">Titre *</label><input id="pj-title"></div>
+          <div class="form-field"><label class="form-label">Description *</label><textarea id="pj-desc"></textarea></div>
+          <div class="form-field"><label class="form-label">Technologies (virgule séparées)</label><input id="pj-tags" placeholder="Windows Server, VLAN, AD"></div>
+          <div class="form-field"><label class="form-label">Lien GitHub (optionnel)</label><input id="pj-link" type="url" placeholder="https://github.com/…"></div>
+          <div style="display:flex;gap:.6rem"><button class="btn bg" id="pj-save"><i class="fas fa-save"></i>Sauvegarder</button><button class="btn br" id="pj-del" style="display:none"><i class="fas fa-trash"></i>Supprimer</button></div>
+        </div></div></div>
+      </div>
+    </div>
+
+    <!-- EXPÉRIENCES -->
+    <div class="page-section" id="tab-xp">
+      <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:1.5rem">
+        <div class="card"><div class="card-header"><span class="card-title">Expériences</span><button class="btn bsm" id="new-xp-btn"><i class="fas fa-plus"></i>Ajouter</button></div><div class="items-list" id="xp-list"></div></div>
+        <div class="card"><div class="card-header"><span class="card-title" id="xp-form-t">Nouvelle expérience</span></div><div class="card-body"><div class="form-grid">
+          <div class="form-field"><label class="form-label">Intitulé *</label><input id="xp-title"></div>
+          <div class="fg2">
+            <div class="form-field"><label class="form-label">Type</label><select id="xp-type"><option value="stage">Stage BTS SIO</option><option value="job">Emploi / Saisonnier</option><option value="formation">Formation</option></select></div>
+            <div class="form-field"><label class="form-label">Date / Période</label><input id="xp-date" placeholder="2025"></div>
+          </div>
+          <div class="form-field"><label class="form-label">Lieu / Adresse</label><input id="xp-lieu"></div>
+          <div class="form-field"><label class="form-label">Description courte</label><textarea id="xp-desc" style="min-height:60px"></textarea></div>
+          <div class="form-field"><label class="form-label">Missions (une par ligne)</label><textarea id="xp-missions" style="min-height:100px" placeholder="Mise en place NIS2&#10;Déploiement WDS&#10;Administration Active Directory"></textarea></div>
+          <div class="form-field"><label class="form-label">Tags (virgule séparés)</label><input id="xp-tags" placeholder="NIS2, WDS, GLPI"></div>
+          <div class="form-field"><label class="form-label">Lien (optionnel)</label><input id="xp-link" type="url"></div>
+          <div style="display:flex;gap:.6rem"><button class="btn bg" id="xp-save"><i class="fas fa-save"></i>Sauvegarder</button><button class="btn br" id="xp-del" style="display:none"><i class="fas fa-trash"></i>Supprimer</button></div>
+        </div></div></div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATIONS -->
+    <div class="page-section" id="tab-certs">
+      <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:1.5rem">
+        <div class="card"><div class="card-header"><span class="card-title">Certifications</span><button class="btn bsm" id="new-cf-btn"><i class="fas fa-plus"></i>Ajouter</button></div><div class="items-list" id="cf-list"></div></div>
+        <div class="card"><div class="card-header"><span class="card-title" id="cf-form-t">Nouvelle certification</span></div><div class="card-body"><div class="form-grid">
+          <div class="form-field"><label class="form-label">Titre *</label><input id="cf-title"></div>
+          <div class="fg2"><div class="form-field"><label class="form-label">Organisme</label><input id="cf-issuer" placeholder="Cisco, Microsoft…"></div><div class="form-field"><label class="form-label">Statut</label><select id="cf-status"><option value="obtained">✓ Obtenu</option><option value="in-progress">⋯ En cours</option><option value="planned">○ Planifié</option></select></div></div>
+          <div class="form-field"><label class="form-label">Description</label><textarea id="cf-desc"></textarea></div>
+          <div class="form-field"><label class="form-label">Date</label><input id="cf-date"></div>
+          <div class="form-field"><label class="form-label">Badge ID Credly (UUID)</label><input id="cf-badge" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><div class="form-hint">Visible dans l'URL credly.com/badges/…</div></div>
+          <div style="display:flex;gap:.6rem"><button class="btn bg" id="cf-save"><i class="fas fa-save"></i>Sauvegarder</button><button class="btn br" id="cf-del" style="display:none"><i class="fas fa-trash"></i>Supprimer</button></div>
+        </div></div></div>
+      </div>
+    </div>
+
+    <!-- VEILLE -->
+    <div class="page-section" id="tab-veille">
+      <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:1.5rem">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Articles de veille</span><button class="btn bsm" id="new-af-btn"><i class="fas fa-plus"></i>Ajouter</button></div>
+          <div class="items-list" id="af-list"></div>
+          <div style="padding:.7rem 1rem;border-top:1px solid var(--border)"><p style="font-size:.7rem;color:var(--muted)"><i class="fas fa-rss" style="color:var(--gold)"></i>&nbsp;Articles RSS chargés auto sur veille.html. Tes articles apparaissent en premier.</p></div>
+        </div>
+        <div class="card"><div class="card-header"><span class="card-title" id="af-form-t">Nouvel article</span></div><div class="card-body"><div class="form-grid">
+          <div class="form-field"><label class="form-label">Titre *</label><input id="af-title"></div>
+          <div class="fg2"><div class="form-field"><label class="form-label">Catégorie</label><select id="af-cat"><option value="securite">Cybersécurité</option><option value="reseau">Réseaux</option><option value="systeme">Systèmes</option><option value="cyber">Cloud &amp; DevOps</option></select></div><div class="form-field"><label class="form-label">Date</label><input id="af-date" placeholder="Mars 2025"></div></div>
+          <div class="form-field"><label class="form-label">Résumé *</label><textarea id="af-summary"></textarea></div>
+          <div class="fg2"><div class="form-field"><label class="form-label">Source</label><input id="af-source" placeholder="ANSSI, CERT-FR…"></div><div class="form-field"><label class="form-label">Lien</label><input id="af-link" type="url" placeholder="https://…"></div></div>
+          <div style="display:flex;gap:.6rem"><button class="btn bg" id="af-save"><i class="fas fa-save"></i>Sauvegarder</button><button class="btn br" id="af-del" style="display:none"><i class="fas fa-trash"></i>Supprimer</button></div>
+        </div></div></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page-section" id="tab-settings">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:800px">
+        <div class="card"><div class="card-header"><span class="card-title">Mot de passe</span></div><div class="card-body"><div class="form-grid">
+          <div class="form-field"><label class="form-label">Nouveau mot de passe</label><input type="password" id="new-pwd"></div>
+          <div class="form-field"><label class="form-label">Confirmer</label><input type="password" id="new-pwd2"></div>
+          <button class="btn bg" id="change-pwd-btn"><i class="fas fa-key"></i>Mettre à jour</button>
+          <p class="form-hint">Raccourci accès admin : <kbd style="background:rgba(255,255,255,.08);padding:.1rem .35rem;border-radius:3px">Ctrl+Shift+K</kbd></p>
+        </div></div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Données</span></div><div class="card-body"><div class="form-grid">
+          <button class="btn bo" id="exp-v-btn"><i class="fas fa-download"></i>Exporter visites (JSON)</button>
+          <button class="btn bo" id="exp-c-btn"><i class="fas fa-file-export"></i>Exporter tout le contenu</button>
+          <button class="btn br" id="clr-v-btn"><i class="fas fa-trash"></i>Effacer les visites</button>
+          <button class="btn br" id="clr-all-btn"><i class="fas fa-bomb"></i>Réinitialiser TOUT</button>
+        </div></div></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+var K={visits:'ksb_visits',certs:'ksb_admin_certs',veille:'ksb_admin_veille',skills:'ksb_admin_skills',projets:'ksb_admin_projets',xp:'ksb_admin_xp',profil:'ksb_admin_profil',about:'ksb_admin_about',pwd:'ksb_admin_pwd',auth:'ksb_admin_auth',tabs:'ksb_active_tabs'};
+var DEFAULT_PWD='admin2025';
+function $i(id){return document.getElementById(id)}
+function get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}}
+function set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function del(k){localStorage.removeItem(k)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,4)}
+function getPwd(){return localStorage.getItem(K.pwd)||DEFAULT_PWD}
+function toast(msg,col){var t=$i('toast');t.textContent=msg;t.style.borderLeftColor=col||'#4ade80';t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2800)}
+function fmt(ts){var d=new Date(ts);return d.toLocaleDateString('fr-FR')+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+function br(ua){if(!ua)return'—';if(ua.indexOf('Edg')>-1)return'Edge';if(ua.indexOf('Chrome')>-1)return'Chrome';if(ua.indexOf('Firefox')>-1)return'Firefox';if(ua.indexOf('Safari')>-1)return'Safari';return'Autre'}
+
+/* AUTH */
+if(sessionStorage.getItem(K.auth)==='1'){$i('login-screen').style.display='none';$i('dashboard').style.display='block';initAll()}
+$i('pwd-input').addEventListener('keydown',function(e){if(e.key==='Enter')$i('login-btn').click()});
+$i('login-btn').addEventListener('click',function(){if($i('pwd-input').value===getPwd()){sessionStorage.setItem(K.auth,'1');$i('login-err').style.display='none';$i('login-screen').style.display='none';$i('dashboard').style.display='block';initAll()}else{$i('login-err').style.display='block';$i('pwd-input').value=''}});
+$i('logout-btn').addEventListener('click',function(){sessionStorage.removeItem(K.auth);location.reload()});
+
+/* TABS */
+var TITLES={overview:"Vue d'ensemble",visitors:'Visiteurs',profil:'Profil & Accueil',about:'À propos',skills:'Compétences',projets:'Projets',xp:'Expériences',certs:'Certifications',veille:'Veille',settings:'Paramètres'};
+document.querySelectorAll('.nav-item').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var tab=btn.getAttribute('data-tab');
+    document.querySelectorAll('.nav-item').forEach(function(b){b.classList.remove('active')});
+    document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('active')});
+    btn.classList.add('active');
+    var s=$i('tab-'+tab);if(s)s.classList.add('active');
+    $i('tab-title').textContent=TITLES[tab]||tab;
+    var R={overview:renderOv,visitors:renderVis,skills:renderSkList,projets:renderPjList,xp:renderXpList,certs:renderCfList,veille:renderAfList};
+    if(R[tab])R[tab]();
+  });
+});
+
+/* IP */
+function fetchIP(){fetch('https://ip-api.com/json/?fields=status,query,city,country').then(function(r){return r.json()}).then(function(d){$i('ip-bar').innerHTML='<i class="fas fa-globe"></i><strong>Votre IP :</strong>&nbsp;'+(d.status==='success'?d.query+' — '+(d.city||'')+', '+(d.country||''):d.query||'Indisponible')}).catch(function(){$i('ip-bar').innerHTML='<i class="fas fa-globe"></i>IP indisponible'})}
+
+/* ACTIVE */
+function initActive(){function u(){var n=parseInt(localStorage.getItem(K.tabs)||'1',10);$i('active-count').textContent=n;$i('s-active').textContent=n}u();setInterval(u,5000)}
+
+/* ANALYTICS */
+function getVisits(){return get(K.visits)||[]}
+function renderOv(){
+  var vs=getVisits();$i('s-total').textContent=vs.length;
+  var ips={};vs.forEach(function(v){if(v.ip)ips[v.ip]=1});$i('s-unique').textContent=Object.keys(ips).length||'—';
+  var ds=0,dc=0;vs.forEach(function(v){if(v.duration>0){ds+=v.duration;dc++}});$i('s-dur').textContent=dc?Math.round(ds/dc)+'s':'—';
+  var pg={};vs.forEach(function(v){pg[v.page]=(pg[v.page]||0)+1});
+  var sk=Object.keys(pg).sort(function(a,b){return pg[b]-pg[a]}).slice(0,6);var mx=sk.length?pg[sk[0]]:1;
+  $i('chart-ov').innerHTML=sk.map(function(p){return'<div class="bar-row"><span class="bar-name">'+p+'</span><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(pg[p]/mx*100)+'%"></div></div><span class="bar-count">'+pg[p]+'</span></div>'}).join('')||'<p style="color:var(--muted);font-size:.8rem;padding:.5rem 0">Aucune donnée</p>';
+  var tb=$i('tb-recent');tb.innerHTML='';
+  vs.slice(0,5).forEach(function(v){var tr=document.createElement('tr');tr.innerHTML='<td class="mo">'+(v.ip||'—')+'</td><td class="di">'+(v.flag?'<img src="'+v.flag+'" style="vertical-align:middle;margin-right:.3rem">':'')+((v.city?v.city+', '+v.country:'—'))+'</td><td><span class="bdg">'+(v.page||'—')+'</span></td><td class="di">'+fmt(v.time)+'</td><td class="di">'+(v.duration>0?v.duration+'s':'—')+'</td>';tb.appendChild(tr)});
+  if(!vs.length)tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted)">Aucune visite</td></tr>';
+}
+var VF='all';
+function renderVis(f){if(f!==undefined)VF=f;var vs=getVisits();if(VF!=='all')vs=vs.filter(function(v){return v.page===VF});var tb=$i('tb-all');tb.innerHTML='';vs.slice(0,300).forEach(function(v,i){var tr=document.createElement('tr');tr.innerHTML='<td class="di">'+(i+1)+'</td><td class="mo">'+(v.ip||'—')+'</td><td class="di">'+(v.flag?'<img src="'+v.flag+'" style="vertical-align:middle;margin-right:.3rem">':'')+((v.city?v.city+', '+v.country:'—'))+'</td><td><span class="bdg">'+(v.page||'—')+'</span></td><td class="di">'+br(v.ua)+'</td><td class="di">'+fmt(v.time)+'</td><td class="di">'+(v.duration>0?v.duration+'s':'—')+'</td>';tb.appendChild(tr)});if(!vs.length)tb.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Aucune visite</td></tr>'}
+document.querySelectorAll('[data-vf]').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('[data-vf]').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');renderVis(btn.getAttribute('data-vf'))})});
+$i('clear-v-btn').addEventListener('click',function(){if(confirm('Effacer tout le journal ?')){del(K.visits);renderVis();toast('Journal effacé','#f87171')}});
+
+/* PROFIL */
+var PD={firstname:'Kilian',lastname:'Sarroca Bonnafé',tagline:"Étudiant en 2e année de BTS SIO SISR au lycée Jean Lurçat, Perpignan.",desc:"Passionné par l'administration des systèmes, réseaux et cybersécurité.",s1n:'2+',s1l:'Ans de formation',s2n:'5+',s2l:'Projets réalisés',s3n:'SISR',s3l:'Spécialisation',li:'https://www.linkedin.com/in/kilian-sarroca-bonn%C3%A9-80a191302/',gh:'https://github.com/KilianSarroca',email:'kilian.sarroca@icloud.com'};
+function loadProfil(){var p=get(K.profil)||PD;Object.keys(p).forEach(function(k){var el=$i('p-'+k);if(el)el.value=p[k]||''})}
+$i('save-profil').addEventListener('click',function(){var p={};['firstname','lastname','tagline','desc','s1n','s1l','s2n','s2l','s3n','s3l','li','gh','email'].forEach(function(k){var el=$i('p-'+k);if(el)p[k]=el.value.trim()});set(K.profil,p);toast('Profil sauvegardé ✓')});
+
+/* ABOUT */
+var AD={p1:"Étudiant en 2e année de BTS SIO SISR au lycée Jean Lurçat de Perpignan. Mon parcours au lycée Dhuoda de Nîmes m'a donné de solides bases techniques.",p2:"Rigoureux et curieux, j'approfondis en permanence mes connaissances en administration réseau et cybersécurité.",form:"BTS SIO SISR — Jean Lurçat, Perpignan",spec:"Administration & Réseaux",loc:"Occitanie, France",dispo:"2e année (2025–2026)"};
+function loadAbout(){var a=get(K.about)||AD;$i('ab-p1').value=a.p1||'';$i('ab-p2').value=a.p2||'';$i('ab-form').value=a.form||'';$i('ab-spec').value=a.spec||'';$i('ab-loc').value=a.loc||'';$i('ab-dispo').value=a.dispo||''}
+$i('save-about').addEventListener('click',function(){set(K.about,{p1:$i('ab-p1').value.trim(),p2:$i('ab-p2').value.trim(),form:$i('ab-form').value.trim(),spec:$i('ab-spec').value.trim(),loc:$i('ab-loc').value.trim(),dispo:$i('ab-dispo').value.trim()});toast('À propos sauvegardé ✓')});
+
+/* SKILLS */
+var DSK=[{id:'s1',name:'Administration systèmes',cat:'systeme',icon:'fas fa-server'},{id:'s2',name:'Déploiement & gestion réseau',cat:'systeme',icon:'fas fa-network-wired'},{id:'s3',name:'Windows Server / Active Directory',cat:'systeme',icon:'fab fa-windows'},{id:'s4',name:'Linux / Bash',cat:'systeme',icon:'fab fa-linux'},{id:'s5',name:'Déploiement WDS',cat:'systeme',icon:'fas fa-desktop'},{id:'s6',name:'GLPI — tickets & stock',cat:'systeme',icon:'fas fa-ticket-alt'},{id:'s7',name:'Rotation des sauvegardes',cat:'systeme',icon:'fas fa-database'},{id:'s8',name:'Support & maintenance',cat:'systeme',icon:'fas fa-wrench'},{id:'s9',name:'Mise en conformité NIS2',cat:'cyber',icon:'fas fa-file-shield'},{id:'s10',name:'Sécurité & ANSSI',cat:'cyber',icon:'fas fa-shield-alt'},{id:'s11',name:'Hacking éthique (Cisco)',cat:'cyber',icon:'fas fa-user-secret'},{id:'s12',name:'VLAN · DHCP · DNS · SSH',cat:'reseau',icon:'fas fa-sitemap'},{id:'s13',name:'iptables · SSL/TLS',cat:'reseau',icon:'fas fa-fire-alt'},{id:'s14',name:'WebRTC · SFU · COTURN',cat:'reseau',icon:'fas fa-video'},{id:'s15',name:'HTML / CSS',cat:'dev',icon:'fab fa-html5'},{id:'s16',name:'JavaScript',cat:'dev',icon:'fab fa-js-square'}];
+var CL={systeme:'Systèmes',cyber:'Cybersec.',reseau:'Réseaux',dev:'Dev Web'};
+var curSk=null;
+function getSk(){return get(K.skills)||DSK}
+function renderSkList(){var l=getSk();var el=$i('sk-list');el.innerHTML='';l.forEach(function(s){var r=document.createElement('div');r.className='item-row';r.innerHTML='<i class="'+s.icon+'" style="color:var(--gold);width:1rem;text-align:center;font-size:.78rem;flex-shrink:0"></i><span class="item-label">'+s.name+'</span><span class="sk-cat">'+(CL[s.cat]||s.cat)+'</span><div class="item-actions"><button class="bi" data-sk="'+s.id+'"><i class="fas fa-pen"></i></button><button class="bi del" data-skd="'+s.id+'"><i class="fas fa-trash"></i></button></div>';el.appendChild(r)});el.querySelectorAll('[data-sk]').forEach(function(b){b.addEventListener('click',function(){var s=getSk().find(function(x){return x.id===b.getAttribute('data-sk')});if(s)loadSkForm(s)})});el.querySelectorAll('[data-skd]').forEach(function(b){b.addEventListener('click',function(){if(!confirm('Supprimer ?'))return;set(K.skills,getSk().filter(function(x){return x.id!==b.getAttribute('data-skd')}));renderSkList();toast('Supprimée','#f87171')})})}
+function loadSkForm(s){curSk=s?s.id:null;$i('sk-name').value=s?s.name:'';$i('sk-cat').value=s?s.cat:'systeme';$i('sk-icon').value=s?s.icon:'fas fa-server';$i('sk-del').style.display=s?'':'none';$i('sk-form-t').textContent=s?'Modifier : '+s.name.substring(0,20):'Nouvelle compétence'}
+$i('new-sk-btn').addEventListener('click',function(){loadSkForm(null)});
+$i('sk-save').addEventListener('click',function(){var n=$i('sk-name').value.trim();if(!n){toast('Nom requis','#f87171');return}var l=getSk();var o={id:curSk||uid(),name:n,cat:$i('sk-cat').value,icon:$i('sk-icon').value.trim()||'fas fa-tools'};if(curSk){var i=l.findIndex(function(x){return x.id===curSk});if(i>=0)l[i]=o}else l.push(o);set(K.skills,l);renderSkList();loadSkForm(null);toast('Compétence sauvegardée ✓')});
+$i('sk-del').addEventListener('click',function(){if(!curSk||!confirm('Supprimer ?'))return;set(K.skills,getSk().filter(function(x){return x.id!==curSk}));curSk=null;loadSkForm(null);renderSkList();toast('Supprimée','#f87171')});
+
+/* PROJETS */
+var DPJ=[{id:'pj1',title:'Portfolio Personnel',desc:"Conception d'un portfolio professionnel responsive.",tags:'HTML5,CSS3,JavaScript,Responsive',link:'https://github.com/KilianSarroca'},{id:'pj2',title:'Infrastructure Réseau — TP SISR',desc:'Mise en place réseau complet en environnement virtualisé.',tags:'Windows Server,Active Directory,VLAN,VirtualBox',link:''},{id:'pj3',title:'Administration Serveur Linux',desc:"Déploiement et sécurisation d'un serveur web Apache sous Debian.",tags:'Debian,Apache2,SSL/TLS,iptables,SSH',link:''},{id:'pj4',title:'Audit de Sécurité — BTS',desc:'Audit réseau fictif selon les recommandations ANSSI.',tags:'Audit,ANSSI,Nmap,Rapport',link:''}];
+var curPj=null;
+function getPj(){return get(K.projets)||DPJ}
+function renderPjList(){var l=getPj();var el=$i('pj-list');el.innerHTML='';l.forEach(function(p){var r=document.createElement('div');r.className='item-row';r.innerHTML='<div class="item-dot obtained"></div><div style="flex:1"><div class="item-label">'+p.title+'</div><div class="item-sub">'+p.tags.split(',').slice(0,3).join(' · ')+'</div></div><div class="item-actions"><button class="bi" data-pj="'+p.id+'"><i class="fas fa-pen"></i></button><button class="bi del" data-pjd="'+p.id+'"><i class="fas fa-trash"></i></button></div>';el.appendChild(r)});el.querySelectorAll('[data-pj]').forEach(function(b){b.addEventListener('click',function(){var p=getPj().find(function(x){return x.id===b.getAttribute('data-pj')});if(p)loadPjForm(p)})});el.querySelectorAll('[data-pjd]').forEach(function(b){b.addEventListener('click',function(){if(!confirm('Supprimer ?'))return;set(K.projets,getPj().filter(function(x){return x.id!==b.getAttribute('data-pjd')}));renderPjList();toast('Supprimé','#f87171')})})}
+function loadPjForm(p){curPj=p?p.id:null;$i('pj-title').value=p?p.title:'';$i('pj-desc').value=p?p.desc:'';$i('pj-tags').value=p?p.tags:'';$i('pj-link').value=p?p.link:'';$i('pj-del').style.display=p?'':'none';$i('pj-form-t').textContent=p?'Modifier : '+p.title.substring(0,20):'Nouveau projet'}
+$i('new-pj-btn').addEventListener('click',function(){loadPjForm(null)});
+$i('pj-save').addEventListener('click',function(){var t=$i('pj-title').value.trim();if(!t){toast('Titre requis','#f87171');return}var l=getPj();var o={id:curPj||uid(),title:t,desc:$i('pj-desc').value.trim(),tags:$i('pj-tags').value.trim(),link:$i('pj-link').value.trim()};if(curPj){var i=l.findIndex(function(x){return x.id===curPj});if(i>=0)l[i]=o}else l.push(o);set(K.projets,l);renderPjList();loadPjForm(null);toast('Projet sauvegardé ✓')});
+$i('pj-del').addEventListener('click',function(){if(!curPj||!confirm('Supprimer ?'))return;set(K.projets,getPj().filter(function(x){return x.id!==curPj}));curPj=null;loadPjForm(null);renderPjList();toast('Supprimé','#f87171')});
+
+/* EXPÉRIENCES */
+var DXP=[{id:'x1',title:"Stage & Saisonnier — Mairie d'Argelès-sur-Mer",type:'stage',date:'2025',lieu:"1 All. Ferdinand Buisson, 66700 Argelès-sur-Mer",desc:"Stage puis emploi saisonnier au service informatique.",missions:"Mise en place de la norme NIS2\nDéploiement WDS\nInstallation fibre optique et horodateur\nMaintenance du parc informatique\nRotation des sauvegardes\nAdministration Active Directory\nTraitement des tickets GLPI et gestion du stock",tags:'NIS2,WDS,Active Directory,GLPI,Fibre optique,Sauvegardes',link:''},{id:'x2',title:'Stage IT — Mind and Go',type:'stage',date:'2025',lieu:'Perpignan, Occitanie',desc:"Infrastructure WebRTC avec SFU et COTURN.",missions:"Installation et configuration d'un serveur SFU\nDéploiement COTURN — TURN/STUN pour traversée NAT\nConfiguration réseau et ports WebRTC",tags:'WebRTC,SFU,COTURN,TURN/STUN,Linux',link:''},{id:'x3',title:'Formation PSC1',type:'formation',date:'2024',lieu:"Les Secouristes du Sud — 13 Chem. d'Azord, 30980 Saint-Dionisy",desc:"Prévention et Secours Civique de niveau 1.",missions:"RCP / DAE\nGestion hémorragies et étouffements\nProtocoles d'alerte",tags:'PSC1,Premiers secours,RCP',link:'https://www.lessecouristesdusud.com/'},{id:'x4',title:'Employé Polyvalent — Aldi',type:'job',date:'2025',lieu:'7 Rue Alfred Nobel, 66470 Sainte-Marie-la-Mer',desc:"Emploi saisonnier.",missions:"Encaissement, mise en rayon\nRéception de marchandises\nPolyvalence et travail d'équipe",tags:'Travail en équipe,Polyvalence',link:''}];
+var curXp=null;
+function getXp(){return get(K.xp)||DXP}
+function renderXpList(){var l=getXp();var el=$i('xp-list');el.innerHTML='';l.forEach(function(x){var r=document.createElement('div');r.className='item-row';r.innerHTML='<div class="item-dot '+x.type+'"></div><div style="flex:1"><div class="item-label">'+x.title+'</div><div class="item-sub">'+x.date+'</div></div><div class="item-actions"><button class="bi" data-xp="'+x.id+'"><i class="fas fa-pen"></i></button><button class="bi del" data-xpd="'+x.id+'"><i class="fas fa-trash"></i></button></div>';el.appendChild(r)});el.querySelectorAll('[data-xp]').forEach(function(b){b.addEventListener('click',function(){var x=getXp().find(function(i){return i.id===b.getAttribute('data-xp')});if(x)loadXpForm(x)})});el.querySelectorAll('[data-xpd]').forEach(function(b){b.addEventListener('click',function(){if(!confirm('Supprimer ?'))return;set(K.xp,getXp().filter(function(x){return x.id!==b.getAttribute('data-xpd')}));renderXpList();toast('Supprimée','#f87171')})})}
+function loadXpForm(x){curXp=x?x.id:null;$i('xp-title').value=x?x.title:'';$i('xp-type').value=x?x.type:'stage';$i('xp-date').value=x?x.date:'';$i('xp-lieu').value=x?x.lieu:'';$i('xp-desc').value=x?x.desc:'';$i('xp-missions').value=x?x.missions:'';$i('xp-tags').value=x?x.tags:'';$i('xp-link').value=x?x.link:'';$i('xp-del').style.display=x?'':'none';$i('xp-form-t').textContent=x?'Modifier : '+x.title.substring(0,20):'Nouvelle expérience'}
+$i('new-xp-btn').addEventListener('click',function(){loadXpForm(null)});
+$i('xp-save').addEventListener('click',function(){var t=$i('xp-title').value.trim();if(!t){toast('Titre requis','#f87171');return}var l=getXp();var o={id:curXp||uid(),title:t,type:$i('xp-type').value,date:$i('xp-date').value.trim(),lieu:$i('xp-lieu').value.trim(),desc:$i('xp-desc').value.trim(),missions:$i('xp-missions').value.trim(),tags:$i('xp-tags').value.trim(),link:$i('xp-link').value.trim()};if(curXp){var i=l.findIndex(function(x){return x.id===curXp});if(i>=0)l[i]=o}else l.push(o);set(K.xp,l);renderXpList();loadXpForm(null);toast('Expérience sauvegardée ✓')});
+$i('xp-del').addEventListener('click',function(){if(!curXp||!confirm('Supprimer ?'))return;set(K.xp,getXp().filter(function(x){return x.id!==curXp}));curXp=null;loadXpForm(null);renderXpList();toast('Supprimée','#f87171')});
+
+/* CERTIFICATIONS */
+var DCF=[{id:'c1',title:'Operating Systems Basics',issuer:'Cisco',status:'obtained',desc:"Fondamentaux des systèmes d'exploitation.",date:'2024-2025',badge:'1c32d8d7-91c4-4470-8a05-22e967904b57'},{id:'c2',title:'Ethical Hacker',issuer:'Cisco',status:'obtained',desc:"Hacking éthique et tests d'intrusion.",date:'2024-2025',badge:'9946e957-9c3f-4cc1-af12-7b896a350a32'},{id:'c3',title:'Introduction to Cybersecurity',issuer:'Cisco',status:'obtained',desc:'Introduction à la cybersécurité.',date:'2024-2025',badge:'532c18e5-7dd5-4a37-9ce1-b68a3c10aca5'},{id:'c4',title:'Networking Basics',issuer:'Cisco',status:'obtained',desc:'Bases des réseaux informatiques.',date:'2024-2025',badge:'8c211c71-2d1e-4281-9f69-c7e2eb5aeaae'},{id:'c5',title:'Networking Devices & Initial Configuration',issuer:'Cisco',status:'obtained',desc:'Configuration initiale des équipements Cisco.',date:'2024-2025',badge:'6f798427-4a82-409f-a3fd-31b8054b550f'},{id:'c6',title:'Cisco CCNA',issuer:'Cisco',status:'in-progress',desc:'Administration réseau Cisco complète.',date:'Prévu 2025-2026',badge:''},{id:'c7',title:'Endpoint Security',issuer:'Cisco',status:'planned',desc:'Sécurité des points de terminaison.',date:'À planifier',badge:''},{id:'c8',title:'Network Addressing and Basic Troubleshooting',issuer:'Cisco',status:'planned',desc:'Adressage réseau et dépannage de base.',date:'À planifier',badge:''},{id:'c9',title:'AZ-900 Azure Fundamentals',issuer:'Microsoft',status:'planned',desc:'Fondamentaux du cloud Azure.',date:'Objectif 2026',badge:''}];
+var curCf=null;
+function getCf(){return get(K.certs)||DCF}
+function renderCfList(){var l=getCf();var el=$i('cf-list');el.innerHTML='';l.forEach(function(c){var r=document.createElement('div');r.className='item-row';r.innerHTML='<div class="item-dot '+c.status+'"></div><div style="flex:1"><div class="item-label">'+c.title+'</div><div class="item-sub">'+c.issuer+' · '+c.date+'</div></div><div class="item-actions"><button class="bi" data-cf="'+c.id+'"><i class="fas fa-pen"></i></button><button class="bi del" data-cfd="'+c.id+'"><i class="fas fa-trash"></i></button></div>';el.appendChild(r)});el.querySelectorAll('[data-cf]').forEach(function(b){b.addEventListener('click',function(){var c=getCf().find(function(x){return x.id===b.getAttribute('data-cf')});if(c)loadCfForm(c)})});el.querySelectorAll('[data-cfd]').forEach(function(b){b.addEventListener('click',function(){if(!confirm('Supprimer ?'))return;set(K.certs,getCf().filter(function(x){return x.id!==b.getAttribute('data-cfd')}));renderCfList();toast('Supprimée','#f87171')})})}
+function loadCfForm(c){curCf=c?c.id:null;$i('cf-title').value=c?c.title:'';$i('cf-issuer').value=c?c.issuer:'';$i('cf-status').value=c?c.status:'planned';$i('cf-desc').value=c?c.desc:'';$i('cf-date').value=c?c.date:'';$i('cf-badge').value=c?c.badge:'';$i('cf-del').style.display=c?'':'none';$i('cf-form-t').textContent=c?'Modifier : '+c.title.substring(0,22):'Nouvelle certification'}
+$i('new-cf-btn').addEventListener('click',function(){loadCfForm(null)});
+$i('cf-save').addEventListener('click',function(){var t=$i('cf-title').value.trim();if(!t){toast('Titre requis','#f87171');return}var l=getCf();var o={id:curCf||uid(),title:t,issuer:$i('cf-issuer').value.trim(),status:$i('cf-status').value,desc:$i('cf-desc').value.trim(),date:$i('cf-date').value.trim(),badge:$i('cf-badge').value.trim()};if(curCf){var i=l.findIndex(function(x){return x.id===curCf});if(i>=0)l[i]=o}else l.push(o);set(K.certs,l);renderCfList();loadCfForm(null);toast('Certification sauvegardée ✓')});
+$i('cf-del').addEventListener('click',function(){if(!curCf||!confirm('Supprimer ?'))return;set(K.certs,getCf().filter(function(x){return x.id!==curCf}));curCf=null;loadCfForm(null);renderCfList();toast('Supprimée','#f87171')});
+
+/* VEILLE */
+var curAf=null;
+function getAf(){return get(K.veille)||[]}
+function renderAfList(){var l=getAf();var el=$i('af-list');el.innerHTML='';if(!l.length){el.innerHTML='<p style="color:var(--muted);font-size:.8rem;padding:.8rem">Aucun article manuel.</p>';return}l.forEach(function(a){var r=document.createElement('div');r.className='item-row';r.innerHTML='<div class="item-dot obtained"></div><div style="flex:1"><div class="item-label">'+a.title.substring(0,36)+(a.title.length>36?'…':'')+'</div><div class="item-sub">'+a.cat+' · '+a.date+'</div></div><div class="item-actions"><button class="bi" data-af="'+a.id+'"><i class="fas fa-pen"></i></button><button class="bi del" data-afd="'+a.id+'"><i class="fas fa-trash"></i></button></div>';el.appendChild(r)});el.querySelectorAll('[data-af]').forEach(function(b){b.addEventListener('click',function(){var a=getAf().find(function(x){return x.id===b.getAttribute('data-af')});if(a)loadAfForm(a)})});el.querySelectorAll('[data-afd]').forEach(function(b){b.addEventListener('click',function(){if(!confirm('Supprimer ?'))return;set(K.veille,getAf().filter(function(x){return x.id!==b.getAttribute('data-afd')}));renderAfList();toast('Supprimé','#f87171')})})}
+function loadAfForm(a){curAf=a?a.id:null;$i('af-title').value=a?a.title:'';$i('af-cat').value=a?a.cat:'securite';$i('af-date').value=a?a.date:'';$i('af-summary').value=a?a.summary:'';$i('af-source').value=a?a.source:'';$i('af-link').value=a?a.link:'';$i('af-del').style.display=a?'':'none';$i('af-form-t').textContent=a?'Modifier l\'article':'Nouvel article'}
+$i('new-af-btn').addEventListener('click',function(){loadAfForm(null)});
+$i('af-save').addEventListener('click',function(){var t=$i('af-title').value.trim();var s=$i('af-summary').value.trim();if(!t||!s){toast('Titre et résumé requis','#f87171');return}var l=getAf();var o={id:curAf||uid(),title:t,cat:$i('af-cat').value,date:$i('af-date').value.trim(),summary:s,source:$i('af-source').value.trim(),link:$i('af-link').value.trim()};if(curAf){var i=l.findIndex(function(x){return x.id===curAf});if(i>=0)l[i]=o}else l.unshift(o);set(K.veille,l);renderAfList();loadAfForm(null);toast('Article sauvegardé ✓')});
+$i('af-del').addEventListener('click',function(){if(!curAf||!confirm('Supprimer ?'))return;set(K.veille,getAf().filter(function(x){return x.id!==curAf}));curAf=null;loadAfForm(null);renderAfList();toast('Supprimé','#f87171')});
+
+/* SETTINGS */
+$i('change-pwd-btn').addEventListener('click',function(){var p1=$i('new-pwd').value;var p2=$i('new-pwd2').value;if(!p1){toast('Mot de passe requis','#f87171');return}if(p1!==p2){toast('Ne correspondent pas','#f87171');return}localStorage.setItem(K.pwd,p1);$i('new-pwd').value='';$i('new-pwd2').value='';toast('Mot de passe mis à jour ✓')});
+$i('exp-v-btn').addEventListener('click',function(){var b=new Blob([JSON.stringify(getVisits(),null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ksb_visits_'+new Date().toISOString().split('T')[0]+'.json';a.click()});
+$i('exp-c-btn').addEventListener('click',function(){var d={profil:get(K.profil),about:get(K.about),skills:getSk(),projets:getPj(),xp:getXp(),certs:getCf(),veille:getAf()};var b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ksb_content_'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Contenu exporté ✓')});
+$i('clr-v-btn').addEventListener('click',function(){if(confirm('Effacer toutes les visites ?')){del(K.visits);toast('Visites effacées','#f87171')}});
+$i('clr-all-btn').addEventListener('click',function(){if(confirm('⚠ Réinitialiser TOUTES les données ? Irréversible.')){Object.values(K).forEach(function(k){if(k!==K.pwd&&k!==K.auth)del(k)});toast('Données réinitialisées','#f87171');renderOv()}});
+
+/* INIT */
+function initAll(){fetchIP();initActive();renderOv();loadProfil();loadAbout();loadSkForm(null);loadPjForm(null);loadXpForm(null);loadCfForm(null);loadAfForm(null)}
+}());
+</script>
+</body>
+</html>

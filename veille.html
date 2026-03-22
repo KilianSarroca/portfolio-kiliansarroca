@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Veille technologique de Kilian Sarroca Bonnafé — Cybersécurité, réseaux, systèmes.">
+    <meta name="theme-color" content="#0f1117">
+    <meta property="og:title"       content="Veille Technologique — Kilian Sarroca Bonnafé">
+    <meta property="og:description" content="Actualités cybersécurité, réseaux et systèmes en temps réel.">
+    <meta property="og:type"        content="website">
+    <meta property="og:locale"      content="fr_FR">
+    <title>Veille Technologique — Kilian Sarroca Bonnafé</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230f1117'/><text y='.9em' font-size='68' x='50%' text-anchor='middle' font-family='Georgia,serif' fill='%23c8a86b'>K</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Loader */
+        .rss-loader {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            color: var(--muted);
+            font-size: .85rem;
+            padding: 2rem 0;
+        }
+        .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid var(--rule);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Barre statut RSS */
+        .rss-status-bar {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .72rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .rss-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--muted);
+        }
+        .rss-dot.live { background: #4ade80; box-shadow: 0 0 5px #4ade80; }
+
+        /* Badge source RSS */
+        .rss-source-badge {
+            display: inline-flex; align-items: center; gap: .3rem;
+            font-size: .68rem; font-weight: 500;
+            color: var(--muted); letter-spacing: .05em;
+            background: rgba(255,255,255,.04);
+            border: 1px solid var(--rule);
+            padding: .15rem .5rem; border-radius: 3px;
+        }
+
+        /* Section sources */
+        .sources-list {
+            display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem;
+        }
+        .source-pill {
+            display: flex; align-items: center; gap: .5rem;
+            background: var(--ink-card); border: 1px solid var(--rule);
+            border-radius: 100px; padding: .4rem .9rem;
+            font-size: .75rem; color: var(--muted-lt);
+            transition: all var(--ease);
+        }
+        .source-pill i { color: var(--gold); font-size: .7rem; }
+        .source-pill:hover { border-color: var(--gold); color: var(--white); }
+    </style>
+</head>
+<body>
+    <div id="page-overlay"></div>
+    <div id="scroll-progress" aria-hidden="true"></div>
+
+    <nav class="navbar scrolled" role="navigation">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Kilian<span class="dot">.</span></a>
+                        <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="competences.html">Compétences</a></li>
+                <li><a href="certifications.html">Certifications</a></li>
+                <li><a href="projets.html">Projets</a></li>
+                <li><a href="experiences.html">Expériences</a></li>
+                <li><a href="veille.html">Veille</a></li>
+                <li><a href="contact.html" class="nav-cta">Me contacter</a></li>
+            </ul>
+            <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <span class="section-label" data-reveal>BTS SIO — Épreuve E5</span>
+            <h1 class="section-heading" data-reveal data-delay="1">Veille <em>Technologique</em></h1>
+            <p class="body-text" style="margin-top:1.2rem;max-width:540px;" data-reveal data-delay="2">
+                Actualités en cybersécurité, réseaux et systèmes. Les articles sont mis à jour automatiquement depuis des flux RSS de référence.
+            </p>
+        </div>
+    </header>
+
+    <main class="veille-body">
+        <div class="container">
+
+            <!-- Barre de statut RSS -->
+            <div class="rss-status-bar" id="rss-status">
+                <div class="rss-dot" id="rss-dot"></div>
+                <span id="rss-status-text">Chargement des flux RSS…</span>
+            </div>
+
+            <!-- Filtres -->
+            <div class="veille-filters" data-reveal role="group" aria-label="Filtrer par catégorie">
+                <button class="filter-btn active" data-filter="all">Tout</button>
+                <button class="filter-btn" data-filter="securite">Cybersécurité</button>
+                <button class="filter-btn" data-filter="reseau">Réseaux</button>
+                <button class="filter-btn" data-filter="systeme">Systèmes</button>
+                <button class="filter-btn" data-filter="cyber">Cloud &amp; DevOps</button>
+            </div>
+
+            <!-- Loader -->
+            <div class="rss-loader" id="rss-loader">
+                <div class="spinner"></div>
+                Récupération des flux RSS en cours…
+            </div>
+
+            <!-- Grille d'articles (RSS + manuels) -->
+            <div class="veille-grid" id="veille-grid"></div>
+
+            <!-- Méthode de veille -->
+            <div class="veille-method" data-reveal style="margin-top:4rem;">
+                <span class="section-label">Méthodologie</span>
+                <h2 class="section-heading" style="font-size:1.8rem;margin-top:.5rem;">Sources &amp; <em>démarche</em></h2>
+                <div class="sources-list" style="margin-bottom:2rem;">
+                    <span class="source-pill"><i class="fas fa-rss"></i> CERT-FR</span>
+                    <span class="source-pill"><i class="fas fa-rss"></i> The Hacker News</span>
+                    <span class="source-pill"><i class="fas fa-rss"></i> Bleeping Computer</span>
+                    <span class="source-pill"><i class="fas fa-rss"></i> ZATAZ</span>
+                    <span class="source-pill"><i class="fab fa-linkedin"></i> LinkedIn</span>
+                    <span class="source-pill"><i class="fas fa-newspaper"></i> ANSSI</span>
+                </div>
+                <div class="veille-method-grid">
+                    <div class="veille-method-item" data-reveal data-delay="1">
+                        <i class="fas fa-rss"></i>
+                        <h4>Flux RSS automatiques</h4>
+                        <p>Agrégation en temps réel via l'API rss2json depuis CERT-FR, The Hacker News et Bleeping Computer. Cache 30 minutes.</p>
+                    </div>
+                    <div class="veille-method-item" data-reveal data-delay="2">
+                        <i class="fab fa-linkedin"></i>
+                        <h4>LinkedIn &amp; Réseaux</h4>
+                        <p>Suivi de professionnels reconnus du secteur cybersécurité et réseau pour les retours d'expérience terrain.</p>
+                    </div>
+                    <div class="veille-method-item" data-reveal data-delay="3">
+                        <i class="fas fa-newspaper"></i>
+                        <h4>Publications officielles</h4>
+                        <p>Bulletins ANSSI, CVE Mitre et rapports des éditeurs de sécurité pour les alertes critiques.</p>
+                    </div>
+                    <div class="veille-method-item" data-reveal data-delay="4">
+                        <i class="fas fa-edit"></i>
+                        <h4>Articles personnels</h4>
+                        <p>Articles rédigés manuellement ajoutables depuis le panneau d'administration du portfolio.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <p class="footer-copy">&copy; 2025 Kilian Sarroca Bonnafé</p>
+                <div class="footer-links">
+                    <a href="certifications.html">Certifications</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-top" aria-label="Retour en haut">
+        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    </a>
+
+    <script src="js/content-loader.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        var CACHE_KEY = 'ksb_rss_cache';
+        var CACHE_TTL = 30 * 60 * 1000; /* 30 minutes */
+        var VEILLE_KEY = 'ksb_admin_veille';
+
+        /* ── Sources RSS (via rss2json proxy CORS-free) ── */
+        var FEEDS = [
+            {
+                name: 'CERT-FR', cat: 'securite',
+                url: 'https://www.cert.ssi.gouv.fr/feed/',
+                count: 4
+            },
+            {
+                name: 'The Hacker News', cat: 'securite',
+                url: 'https://feeds.feedburner.com/TheHackersNews',
+                count: 3
+            },
+            {
+                name: 'Bleeping Computer', cat: 'securite',
+                url: 'https://www.bleepingcomputer.com/feed/',
+                count: 3
+            }
+        ];
+
+        var CAT_LABELS = { securite: 'Cybersécurité', reseau: 'Réseaux', systeme: 'Systèmes', cyber: 'Cloud & DevOps' };
+
+        function fmtDate(str) {
+            if (!str) return '';
+            var d = new Date(str);
+            if (isNaN(d)) return str;
+            return d.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+        }
+
+        function strip(html) {
+            if (!html) return '';
+            return html.replace(/<[^>]+>/g, '').replace(/&[a-z]+;/g, ' ').trim().substring(0, 180);
+        }
+
+        /* ── Rendu d'une carte ── */
+        function makeCard(article) {
+            var card = document.createElement('article');
+            card.className = 'veille-card';
+            card.setAttribute('data-category', article.cat || 'securite');
+
+            var band = '<div class="veille-card-band ' + (article.cat || 'securite') + '"></div>';
+            var catBadge = '<span class="veille-cat-badge ' + (article.cat || 'securite') + '">' + (CAT_LABELS[article.cat] || 'Cybersécurité') + '</span>';
+            var sourceBadge = article.source
+                ? '<span class="rss-source-badge"><i class="fas fa-rss"></i>' + article.source + '</span>'
+                : '';
+            var link = article.link
+                ? '<a href="' + article.link + '" target="_blank" rel="noopener noreferrer" class="veille-link">Lire <i class="fas fa-arrow-right"></i></a>'
+                : '';
+
+            card.innerHTML =
+                band +
+                '<div class="veille-card-body">' +
+                    '<div class="veille-card-meta">' + catBadge + '<span class="veille-date">' + fmtDate(article.date) + '</span></div>' +
+                    '<h3>' + (article.title || '—') + '</h3>' +
+                    '<p>' + strip(article.summary || article.desc || '') + (article.summary && article.summary.length > 180 ? '…' : '') + '</p>' +
+                    '<div class="veille-card-footer">' +
+                        '<span class="veille-source">' + sourceBadge + '</span>' +
+                        link +
+                    '</div>' +
+                '</div>';
+
+            return card;
+        }
+
+        /* ── Rendu de la grille ── */
+        function renderGrid(articles) {
+            var grid = document.getElementById('veille-grid');
+            grid.innerHTML = '';
+            if (!articles.length) {
+                grid.innerHTML = '<p style="color:var(--muted-lt);font-size:.9rem;padding:1rem 0">Aucun article disponible pour le moment.</p>';
+                return;
+            }
+            articles.forEach(function(a) {
+                var card = makeCard(a);
+                card.classList.add('revealed');
+                grid.appendChild(card);
+            });
+        }
+
+        /* ── Fetch RSS via rss2json ── */
+        function fetchFeed(feed) {
+            var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' +
+                encodeURIComponent(feed.url) + '&count=' + feed.count;
+
+            return fetch(apiUrl)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.status !== 'ok') return [];
+                    return (data.items || []).map(function(item) {
+                        return {
+                            title:   item.title,
+                            summary: item.description || item.content || '',
+                            date:    item.pubDate,
+                            link:    item.link,
+                            cat:     feed.cat,
+                            source:  feed.name
+                        };
+                    });
+                })
+                .catch(function() { return []; });
+        }
+
+        /* ── Articles manuels depuis admin ── */
+        function getManualArticles() {
+            try {
+                return JSON.parse(localStorage.getItem(VEILLE_KEY) || '[]');
+            } catch(e) { return []; }
+        }
+
+        /* ── Articles de secours (si RSS inaccessible) ── */
+        var FALLBACK = [
+            { title:'Directive NIS2 : obligations 2025 pour les entreprises françaises',
+              summary:'Transposée en droit français, la directive NIS2 élargit le périmètre des entités soumises aux obligations de cybersécurité. Notification d\'incidents sous 24h requise pour les entités critiques.',
+              date:'2025-01-15', link:'https://www.anssi.fr', cat:'securite', source:'ANSSI' },
+            { title:'Wi-Fi 7 (802.11be) : déploiement et enjeux de sécurité',
+              summary:'Le standard Wi-Fi 7 atteint théoriquement 46 Gbps. Le MLO (Multi-Link Operation) et les canaux 320 MHz introduisent de nouvelles surfaces d\'attaque à maîtriser.',
+              date:'2025-02-10', link:'https://www.wi-fi.org', cat:'reseau', source:'Wi-Fi Alliance' },
+            { title:'Windows Server 2025 : SMB over QUIC et pare-feu renforcé',
+              summary:'Windows Server 2025 introduit SMB over QUIC, une amélioration du pare-feu Windows Defender et une intégration native avec Azure Arc pour la gestion hybride.',
+              date:'2025-01-20', link:'https://learn.microsoft.com', cat:'systeme', source:'Microsoft Learn' },
+            { title:'Ransomware 2024 : tendances et vecteurs d\'attaque dominants',
+              summary:'Le rapport CERT-FR fait état d\'une augmentation des attaques par supply chain. Les vecteurs principaux : VPN non patchés, phishing ciblé et exposition RDP.',
+              date:'2024-12-01', link:'https://www.cert.ssi.gouv.fr', cat:'securite', source:'CERT-FR' },
+            { title:'Kubernetes 1.32 : nouvelles fonctionnalités pour les équipes SISR',
+              summary:'La version 1.32 améliore la gestion des ressources GPU, stabilise l\'API Gateway et renforce les politiques RBAC pour les infras conteneurisées.',
+              date:'2024-11-05', link:'https://kubernetes.io/blog', cat:'cyber', source:'Kubernetes.io' },
+            { title:'SD-WAN : adoption dans les PME et remplacement des liaisons MPLS',
+              summary:'Le SD-WAN s\'impose comme alternative aux liaisons MPLS. Les solutions Cisco Viptela et Fortinet permettent une gestion centralisée et une QoS dynamique.',
+              date:'2024-10-18', link:'#', cat:'reseau', source:'IT Partner' }
+        ];
+
+        /* ── Chargement principal ── */
+        function loadAll() {
+            var loader     = document.getElementById('rss-loader');
+            var dot        = document.getElementById('rss-dot');
+            var statusText = document.getElementById('rss-status-text');
+
+            /* Cache valide ? */
+            try {
+                var cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+                if (cached && (Date.now() - cached.ts) < CACHE_TTL) {
+                    loader.style.display = 'none';
+                    dot.classList.add('live');
+                    statusText.textContent = 'Flux mis en cache · Dernière MàJ : ' + new Date(cached.ts).toLocaleTimeString('fr-FR');
+                    renderGrid(cached.articles);
+                    return;
+                }
+            } catch(e) {}
+
+            /* Fetch tous les feeds en parallèle */
+            var fetches = FEEDS.map(fetchFeed);
+            Promise.all(fetches)
+                .then(function(results) {
+                    var allArticles = [];
+                    results.forEach(function(items) { allArticles = allArticles.concat(items); });
+
+                    /* Ajoute articles manuels admin en tête */
+                    var manual = getManualArticles();
+                    allArticles = manual.concat(allArticles);
+
+                    /* Tri par date décroissante */
+                    allArticles.sort(function(a, b) {
+                        return new Date(b.date || 0) - new Date(a.date || 0);
+                    });
+
+                    if (!allArticles.length) {
+                        allArticles = getManualArticles().length ? getManualArticles() : FALLBACK;
+                        statusText.textContent = 'Articles de référence (RSS non disponible)';
+                    } else {
+                        /* Cache */
+                        try {
+                            localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), articles: allArticles }));
+                        } catch(e) {}
+                        dot.classList.add('live');
+                        statusText.textContent = allArticles.length + ' articles · Mis à jour le ' + new Date().toLocaleString('fr-FR', {day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
+                    }
+
+                    loader.style.display = 'none';
+                    renderGrid(allArticles);
+                })
+                .catch(function() {
+                    loader.style.display = 'none';
+                    statusText.textContent = 'RSS inaccessible — articles de référence affichés';
+                    renderGrid(getManualArticles().length ? getManualArticles() : FALLBACK);
+                });
+        }
+
+        /* Lance au chargement */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadAll);
+        } else {
+            loadAll();
+        }
+
+    }());
+    </script>
+</body>
+</html>

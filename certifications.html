@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Certifications de Kilian Sarroca Bonnafé — Cisco, Credly, cybersécurité et réseaux.">
+    <meta name="theme-color" content="#0f1117">
+    <meta property="og:title"       content="Certifications — Kilian Sarroca Bonnafé">
+    <meta property="og:description" content="Certifications Cisco obtenues, vérifiables sur Credly.">
+    <meta property="og:type"        content="website">
+    <meta property="og:locale"      content="fr_FR">
+    <title>Certifications — Kilian Sarroca Bonnafé</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230f1117'/><text y='.9em' font-size='68' x='50%' text-anchor='middle' font-family='Georgia,serif' fill='%23c8a86b'>K</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Grille badges ── */
+        .credly-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .badge-card {
+            background: var(--ink-card);
+            border: 1px solid var(--rule);
+            border-radius: var(--r-lg);
+            padding: 1.8rem 1.4rem 1.4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            text-align: center;
+            text-decoration: none;
+            transition: all var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity var(--ease);
+        }
+
+        .badge-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(200,168,107,0.15);
+        }
+
+        .badge-card:hover::before { opacity: 1; }
+
+        /* Image du badge */
+        .badge-img-wrap {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .badge-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform var(--ease);
+        }
+
+        .badge-card:hover .badge-img-wrap img {
+            transform: scale(1.06);
+        }
+
+        /* Placeholder pendant le chargement */
+        .badge-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--ink-soft);
+            border: 2px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 2rem;
+            animation: pulse-load 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-load {
+            0%, 100% { opacity: 0.4; }
+            50%       { opacity: 0.8; }
+        }
+
+        .badge-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.35;
+        }
+
+        .badge-issuer {
+            font-size: 0.75rem;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+        }
+
+        .badge-verify {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--gold);
+            text-transform: uppercase;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid rgba(200,168,107,0.3);
+            border-radius: 100px;
+            margin-top: auto;
+            transition: all var(--ease);
+        }
+
+        .badge-card:hover .badge-verify {
+            background: var(--gold-pale);
+            border-color: var(--gold);
+        }
+
+        /* Certifications planifiées */
+        .cert-dynamic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .credly-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 380px) {
+            .credly-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="page-overlay"></div>
+    <div id="scroll-progress" aria-hidden="true"></div>
+
+    <nav class="navbar scrolled" role="navigation">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Kilian<span class="dot">.</span></a>
+                        <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="competences.html">Compétences</a></li>
+                <li><a href="certifications.html">Certifications</a></li>
+                <li><a href="projets.html">Projets</a></li>
+                <li><a href="experiences.html">Expériences</a></li>
+                <li><a href="veille.html">Veille</a></li>
+                <li><a href="contact.html" class="nav-cta">Me contacter</a></li>
+            </ul>
+            <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <span class="section-label" data-reveal>Certifications Cisco · Credly</span>
+            <h1 class="section-heading" data-reveal data-delay="1">Certifi&shy;cations</h1>
+            <p class="body-text" style="margin-top:1.2rem;max-width:500px;" data-reveal data-delay="2">
+                Badges numériques vérifiables obtenus via la plateforme Credly. Chaque badge est cliquable pour accéder à sa vérification officielle.
+            </p>
+        </div>
+    </header>
+
+    <main class="cert-body">
+        <div class="container">
+
+            <div data-reveal>
+                <span class="section-label">Obtenues &amp; vérifiables</span>
+                <h2 class="section-heading" style="font-size:1.8rem; margin-bottom:2.5rem;">
+                    Badges <em>Credly</em>
+                </h2>
+            </div>
+
+            <!-- Grille badges — remplie par JS -->
+            <div class="credly-grid" id="credly-grid" data-reveal data-delay="1">
+                <!-- Placeholders pendant le chargement -->
+                <div class="badge-card" style="pointer-events:none;">
+                    <div class="badge-placeholder"><i class="fas fa-certificate"></i></div>
+                    <div class="badge-title" style="color:var(--muted);font-size:.85rem;">Chargement…</div>
+                </div>
+                <div class="badge-card" style="pointer-events:none;">
+                    <div class="badge-placeholder"><i class="fas fa-certificate"></i></div>
+                    <div class="badge-title" style="color:var(--muted);font-size:.85rem;">Chargement…</div>
+                </div>
+                <div class="badge-card" style="pointer-events:none;">
+                    <div class="badge-placeholder"><i class="fas fa-certificate"></i></div>
+                    <div class="badge-title" style="color:var(--muted);font-size:.85rem;">Chargement…</div>
+                </div>
+                <div class="badge-card" style="pointer-events:none;">
+                    <div class="badge-placeholder"><i class="fas fa-certificate"></i></div>
+                    <div class="badge-title" style="color:var(--muted);font-size:.85rem;">Chargement…</div>
+                </div>
+                <div class="badge-card" style="pointer-events:none;">
+                    <div class="badge-placeholder"><i class="fas fa-certificate"></i></div>
+                    <div class="badge-title" style="color:var(--muted);font-size:.85rem;">Chargement…</div>
+                </div>
+            </div>
+
+            <!-- Certifications en cours / planifiées -->
+            <div data-reveal style="margin-top:1rem;">
+                <span class="section-label">En cours &amp; planifiées</span>
+                <h2 class="section-heading" style="font-size:1.8rem; margin-bottom:2rem;">
+                    Roadmap <em>certifications</em>
+                </h2>
+            </div>
+
+            <div class="cert-dynamic-grid" id="certs-dynamic" data-reveal data-delay="1"></div>
+
+            <div class="cert-placeholder-note" data-reveal style="margin-top:3rem;">
+                <h3><i class="fas fa-shield-alt" style="margin-right:.5rem"></i> Ajouter une certification</h3>
+                <ol>
+                    <li>Accède à l'admin avec <kbd style="background:rgba(255,255,255,.08);padding:.1rem .4rem;border-radius:3px;font-size:.8rem;">Ctrl+Shift+K</kbd></li>
+                    <li>Onglet <strong>Certifications</strong> → <strong>Nouveau</strong></li>
+                    <li>Remplis le titre, l'organisme, le statut et la date</li>
+                    <li>Pour un badge Credly, colle l'ID UUID du badge</li>
+                </ol>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <p class="footer-copy">&copy; 2025 Kilian Sarroca Bonnafé</p>
+                <div class="footer-links">
+                    <a href="competences.html">Compétences</a>
+                    <a href="projets.html">Projets</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-top" aria-label="Retour en haut">
+        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    </a>
+
+    <script src="js/content-loader.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+    /* ══════════════════════════════════════════
+       CHARGEMENT DES BADGES CREDLY
+       Utilise l'API publique Credly pour récupérer
+       les images — plus fiable que l'embed iframe
+    ══════════════════════════════════════════ */
+    (function () {
+        'use strict';
+
+        var BADGES = [
+            { id: '1c32d8d7-91c4-4470-8a05-22e967904b57', name: 'Operating Systems Basics',                  issuer: 'Cisco' },
+            { id: '9946e957-9c3f-4cc1-af12-7b896a350a32', name: 'Ethical Hacker',                             issuer: 'Cisco' },
+            { id: '532c18e5-7dd5-4a37-9ce1-b68a3c10aca5', name: 'Introduction to Cybersecurity',              issuer: 'Cisco' },
+            { id: '8c211c71-2d1e-4281-9f69-c7e2eb5aeaae', name: 'Networking Basics',                          issuer: 'Cisco' },
+            { id: '6f798427-4a82-409f-a3fd-31b8054b550f', name: 'Networking Devices &amp; Initial Configuration', issuer: 'Cisco' }
+        ];
+
+        var grid = document.getElementById('credly-grid');
+
+        function makeCard(badge, imgSrc) {
+            var a = document.createElement('a');
+            a.href   = 'https://www.credly.com/badges/' + badge.id + '/public_url';
+            a.target = '_blank';
+            a.rel    = 'noopener noreferrer';
+            a.className = 'badge-card';
+            a.setAttribute('aria-label', 'Voir le badge ' + badge.name + ' sur Credly');
+
+            var imgWrap = document.createElement('div');
+            imgWrap.className = 'badge-img-wrap';
+
+            if (imgSrc) {
+                var img = document.createElement('img');
+                img.src   = imgSrc;
+                img.alt   = badge.name;
+                img.width = 120;
+                img.height = 120;
+                img.loading = 'lazy';
+                imgWrap.appendChild(img);
+            } else {
+                /* Fallback visuel si l'API est inaccessible */
+                imgWrap.innerHTML = '<div class="badge-placeholder" style="animation:none;opacity:.6;"><i class="fas fa-award"></i></div>';
+            }
+
+            a.innerHTML =
+                '<div class="badge-title">' + badge.name + '</div>' +
+                '<div class="badge-issuer">' + badge.issuer + '</div>' +
+                '<span class="badge-verify">Vérifier <i class="fas fa-arrow-up-right-from-square" style="font-size:.6rem"></i></span>';
+
+            a.insertBefore(imgWrap, a.firstChild);
+            return a;
+        }
+
+        /* Fetch un badge depuis l'API Credly */
+        function fetchBadge(badge) {
+            return fetch('https://www.credly.com/badges/' + badge.id + '.json', { mode: 'cors' })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    /* L'API renvoie badge_template.image.url */
+                    var imgUrl = null;
+                    if (data && data.data && data.data.badge_template && data.data.badge_template.image) {
+                        imgUrl = data.data.badge_template.image.url ||
+                                 data.data.badge_template.image_url;
+                    }
+                    return { badge: badge, imgUrl: imgUrl };
+                })
+                .catch(function () {
+                    return { badge: badge, imgUrl: null };
+                });
+        }
+
+        /* Vide le grid et remplit avec les vrais badges */
+        function renderBadges(results) {
+            grid.innerHTML = '';
+            results.forEach(function (res) {
+                var card = makeCard(res.badge, res.imgUrl);
+                card.classList.add('revealed');
+                grid.appendChild(card);
+            });
+        }
+
+        /* Charge tous les badges en parallèle */
+        Promise.all(BADGES.map(fetchBadge))
+            .then(renderBadges)
+            .catch(function () {
+                /* Si tout échoue, affiche les cartes sans image */
+                grid.innerHTML = '';
+                BADGES.forEach(function (b) {
+                    var card = makeCard(b, null);
+                    card.classList.add('revealed');
+                    grid.appendChild(card);
+                });
+            });
+
+    }());
+
+    /* ══ Certifications planifiées (admin ou défaut) ══ */
+    (function () {
+        var CERTS_KEY = 'ksb_admin_certs';
+        var DEFAULT = [
+            { id:'c6', title:'Cisco CCNA', issuer:'Cisco', status:'in-progress',
+              desc:'Administration réseau Cisco — routage, switching, VLAN, protocoles TCP/IP.', date:'Prévu 2025–2026', badge:'' },
+            { id:'c7', title:'Endpoint Security', issuer:'Cisco', status:'planned',
+              desc:'Sécurité des points de terminaison — protection des hôtes, détection des menaces et réponse aux incidents.', date:'À planifier', badge:'' },
+            { id:'c8', title:'Network Addressing and Basic Troubleshooting', issuer:'Cisco', status:'planned',
+              desc:'Adressage réseau IPv4/IPv6, sous-réseaux et dépannage de base des infrastructures réseau.', date:'À planifier', badge:'' },
+            { id:'c9', title:'AZ-900 Azure Fundamentals', issuer:'Microsoft', status:'planned',
+              desc:'Fondamentaux du cloud Microsoft Azure.', date:'Objectif 2026', badge:'' }
+        ];
+
+        var STATUS_LABELS = { obtained:'Obtenu', 'in-progress':'En cours', planned:'Planifié' };
+        var STATUS_ICONS  = { obtained:'fas fa-check', 'in-progress':'fas fa-hourglass-half', planned:'fas fa-calendar-alt' };
+
+        var list;
+        try { list = JSON.parse(localStorage.getItem(CERTS_KEY) || 'null'); } catch(e) { list = null; }
+        if (!list) list = DEFAULT;
+
+        /* Filtre les Credly déjà affichés */
+        var knownIds = ['1c32d8d7','9946e957','532c18e5','8c211c71','6f798427'];
+        list = list.filter(function (c) {
+            if (!c.badge) return true;
+            return !knownIds.some(function (k) { return c.badge.indexOf(k) === 0; });
+        });
+
+        var container = document.getElementById('certs-dynamic');
+        if (!container) return;
+
+        list.forEach(function (c) {
+            var card = document.createElement('div');
+            card.className = 'cert-card' + (c.status === 'obtained' ? ' obtained' : '');
+
+            var badgeLink = c.badge
+                ? '<a href="https://www.credly.com/badges/' + c.badge + '" target="_blank" rel="noopener noreferrer" style="font-size:.75rem;color:var(--gold);display:inline-flex;align-items:center;gap:.3rem;margin-top:.4rem;">Voir le badge <i class="fas fa-arrow-up-right-from-square" style="font-size:.6rem"></i></a>'
+                : '';
+
+            var issuerLower = (c.issuer || '').toLowerCase();
+            var iconClass = issuerLower.indexOf('cisco') > -1     ? 'fas fa-network-wired'
+                          : issuerLower.indexOf('comptia') > -1   ? 'fas fa-shield-alt'
+                          : issuerLower.indexOf('microsoft') > -1 ? 'fab fa-microsoft'
+                          : issuerLower.indexOf('linux') > -1     ? 'fab fa-linux'
+                          : 'fas fa-certificate';
+
+            card.innerHTML =
+                '<div class="cert-card-header">' +
+                    '<div class="cert-logo"><i class="' + iconClass + '"></i></div>' +
+                    '<span class="cert-status ' + c.status + '">' + (STATUS_LABELS[c.status] || c.status) + '</span>' +
+                '</div>' +
+                '<div><h3>' + c.title + '</h3><p class="cert-issuer">' + (c.issuer||'') + '</p></div>' +
+                '<p>' + (c.desc||'') + '</p>' +
+                badgeLink +
+                '<div class="cert-date"><i class="' + STATUS_ICONS[c.status] + '"></i> ' + (c.date||'Date à renseigner') + '</div>';
+
+            container.appendChild(card);
+        });
+
+        if (!list.length) {
+            container.innerHTML = '<p style="color:var(--muted-lt);font-size:.9rem;">Aucune certification supplémentaire. Ajoutes-en depuis le panneau admin.</p>';
+        }
+    }());
+    </script>
+</body>
+</html>
